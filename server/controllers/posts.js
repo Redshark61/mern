@@ -40,3 +40,14 @@ export const deletePost = async (req, res) => {
 	const deletedPost = await PostMessage.findByIdAndRemove(_id);
 	res.json(deletedPost);
 };
+
+export const likePost = async (req, res) => {
+	const { id: _id } = req.params;
+
+	if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send("Invalid ID");
+
+	const post = await PostMessage.findById(_id);
+	post.likeCount++;
+	await post.save();
+	res.json(post);
+};
