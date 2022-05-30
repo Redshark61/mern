@@ -67,7 +67,7 @@ const Form = ({ currentId, setCurrentId }) => {
 				<TextField
 					name="title"
 					variant="outlined"
-					label="title"
+					label="Title"
 					fullWidth
 					value={postData.title}
 					onChange={(e) => setPostData({ ...postData, title: e.target.value })}
@@ -75,7 +75,7 @@ const Form = ({ currentId, setCurrentId }) => {
 				<TextField
 					name="message"
 					variant="outlined"
-					label="message"
+					label="Message"
 					fullWidth
 					value={postData.message}
 					onChange={(e) => setPostData({ ...postData, message: e.target.value })}
@@ -83,10 +83,10 @@ const Form = ({ currentId, setCurrentId }) => {
 				<TextField
 					name="tags"
 					variant="outlined"
-					label="tags"
+					label="Tags"
 					fullWidth
 					value={postData.tags}
-					onChange={(e) => setPostData({ ...postData, tags: e.target.value })}
+					onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(",") })}
 				/>
 
 				<div className={classes.fileInput}>
