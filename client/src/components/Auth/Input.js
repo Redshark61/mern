@@ -16,15 +16,21 @@ const Input = (props) => {
 				autoFocus={props.autoFocus}
 				type={props.type}
 				InputProps={
-					props.name === "password" && {
-						endAdornment: (
-							<InputAdornment position="end">
-								<IconButton onClick={props.handleShowPassword}>
-									{props.type === "password" ? <Visibility /> : <VisibilityOff />}
-								</IconButton>
-							</InputAdornment>
-						),
-					}
+					props.name === "password"
+						? {
+								endAdornment: (
+									<InputAdornment position="end">
+										<IconButton onClick={props.handleShowPassword}>
+											{props.type === "password" ? (
+												<Visibility />
+											) : (
+												<VisibilityOff />
+											)}
+										</IconButton>
+									</InputAdornment>
+								),
+						  }
+						: {}
 				}
 			/>
 		</Grid>

@@ -6,8 +6,10 @@ import thunk from "redux-thunk";
 import reducers from "./reducers";
 import App from "./App";
 import "./index.css";
+// import dotenv from "dotenv";
 
 const store = createStore(reducers, compose(applyMiddleware(thunk)));
+// dotenv.config();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

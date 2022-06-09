@@ -2,18 +2,40 @@ import React, { useState } from "react";
 import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from "@material-ui/core";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Input from "./Input";
+import { GoogleLogin } from "react-google-login";
 import useStyles from "./styles";
+import Icon from "./Icon";
+import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const Auth = () => {
 	const classes = useStyles();
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const [isSignUp, setIsSignUp] = useState(false);
-
+	const dispatch = useDispatch();
+	const history = useLocation();
 	const handleSubmit = () => {};
 	const handleChange = () => {};
 	const switchMode = () => {
 		setIsSignUp((prevState) => !prevState);
 		setIsPasswordVisible(false);
+	};
+
+	const googleSuccess = async (res) => {
+		const result = res?.profileObj;
+		const token = res?.tokenId;
+
+		try {
+			dispatch({ type: "AUTH", payload: { token, result } });
+			history.push("/");
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const googleFailure = (error) => {
+		console.log(error);
+		console.log("google failure");
 	};
 
 	return (
@@ -76,7 +98,27 @@ const Auth = () => {
 					>
 						{isSignUp ? "Sign Up" : "Sign In"}
 					</Button>
-					<Grid container justify="flex-end">
+					<GoogleLogin
+						clientId={process.env.REACT_APP_CLIENT_ID}
+						render={(renderProps) => (
+							<Button
+								className={classes.googleButton}
+								color="primary"
+								fullWidth
+								onClick={renderProps.onClick}
+								disabled={renderProps.disabled}
+								startIcon={<Icon />}
+								variant="contained"
+							>
+								Sign In
+							</Button>
+						)}
+						onSuccess={googleSuccess}
+						onFailure={googleFailure}
+						cookiePolicy="single_host_origin"
+					/>
+
+					<Grid container justifyContent="flex-end">
 						<Grid item>
 							<Button onClick={switchMode}>{isSignUp ? "Sign In" : "Sign Up"}</Button>
 						</Grid>
