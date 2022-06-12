@@ -5,17 +5,41 @@ import Input from "./Input";
 import { GoogleLogin } from "react-google-login";
 import useStyles from "./styles";
 import Icon from "./Icon";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { signin, signup } from "../../actions/auth";
+
+const initialState = {
+	firstName: "",
+	lastName: "",
+	email: "",
+	password: "",
+	confirmPassword: "",
+};
 
 const Auth = () => {
 	const classes = useStyles();
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const [isSignUp, setIsSignUp] = useState(false);
+	const [formData, setFormData] = useState(initialState);
 	const dispatch = useDispatch();
-	const history = useLocation();
-	const handleSubmit = () => {};
-	const handleChange = () => {};
+	const history = useNavigate();
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (isSignUp) {
+			dispatch(signup(formData, history));
+		} else {
+			dispatch(signin(formData, history));
+		}
+	};
+
+	const handleChange = (e) => {
+		setFormData((prevState) => {
+			return { ...prevState, [e.target.name]: e.target.value };
+		});
+	};
+
 	const switchMode = () => {
 		setIsSignUp((prevState) => !prevState);
 		setIsPasswordVisible(false);
@@ -27,7 +51,7 @@ const Auth = () => {
 
 		try {
 			dispatch({ type: "AUTH", payload: { token, result } });
-			history.push("/");
+			history("/");
 		} catch (error) {
 			console.log(error);
 		}
