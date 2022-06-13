@@ -13,12 +13,12 @@ const Form = ({ currentId, setCurrentId }) => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const [postData, setPostData] = useState({
-		creator: "",
 		title: "",
 		message: "",
 		tags: "",
 		selectedFile: "",
 	});
+	const user = JSON.parse(localStorage.getItem("profile"))?.result;
 
 	useEffect(() => {
 		if (post) setPostData(post);
@@ -28,22 +28,36 @@ const Form = ({ currentId, setCurrentId }) => {
 		e.preventDefault();
 		clear();
 		if (currentId) {
-			dispatch(updatePost(currentId, postData));
+			dispatch(
+				updatePost(currentId, {
+					...postData,
+					name: user?.name,
+				})
+			);
 		} else {
-			dispatch(createPost(postData));
+			dispatch(createPost({ ...postData, name: user?.name }));
 		}
 	};
 
 	const clear = () => {
 		setCurrentId(null);
 		setPostData({
-			creator: "",
 			title: "",
 			message: "",
 			tags: "",
 			selectedFile: "",
 		});
 	};
+
+	if (!user?.name) {
+		return (
+			<Paper className={classes.paper}>
+				<Typography variant="h6" align="center">
+					Please sign in to create a post
+				</Typography>
+			</Paper>
+		);
+	}
 
 	return (
 		<Paper className={classes.paper}>
@@ -56,14 +70,6 @@ const Form = ({ currentId, setCurrentId }) => {
 				<Typography variant="h6">{`${
 					currentId ? "Editing" : "Creating"
 				} a memory`}</Typography>
-				<TextField
-					name="creator"
-					variant="outlined"
-					label="Creator"
-					fullWidth
-					value={postData.creator}
-					onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
-				/>
 				<TextField
 					name="title"
 					variant="outlined"

@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import useStyles from "./styles";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import memories from "../../images/memories.png";
+import decode from "jwt-decode";
 
 const Navbar = () => {
 	const classes = useStyles();
@@ -13,16 +14,21 @@ const Navbar = () => {
 	const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 	console.log(user);
 
-	const logout = () => {
+	const logout = useCallback(() => {
 		dispatch({ type: "LOGOUT" });
 		history("/");
 		setUser(null);
-	};
+	}, [dispatch, history]);
+	const token = user?.token;
 
 	useEffect(() => {
-		const token = user?.token;
+		if (token) {
+			const decoded = decode(token);
+			if (decoded.exp * 1000 < new Date().getTime()) logout();
+		}
+
 		setUser(JSON.parse(localStorage.getItem("profile")));
-	}, [user]);
+	}, [token, logout]);
 
 	return (
 		<AppBar className={classes.appBar} position="static" color="inherit">
