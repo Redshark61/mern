@@ -16,7 +16,6 @@ export const signin = async (req, res) => {
 
 		if (!isPasswordValid) return res.status(401).json({ message: "Invalid credential" });
 
-		console.log("I'm in the signin function");
 		console.log(process.env.JWT_SECRET);
 		const token = jwt.sign(
 			{ id: existingUser._id, email: existingUser.email },
@@ -38,7 +37,6 @@ export const signup = async (req, res) => {
 		if (existingUser) {
 			return res.status(400).json({ error: "User already exists" });
 		}
-		console.log("I'm in the signup controller");
 
 		if (password !== confirmPassword) {
 			return res.status(400).json({ message: "Password doesn't match" });
@@ -46,7 +44,6 @@ export const signup = async (req, res) => {
 
 		const hashedPassword = await bcrypt.hash(password, 12);
 
-		// console.log(hashedPassword, firstName, lastName, email);
 		const result = new User({
 			name: `${firstName} ${lastName}`,
 			email,
@@ -59,7 +56,6 @@ export const signup = async (req, res) => {
 
 		return res.status(200).json({ result, token });
 	} catch (error) {
-		console.log("une erreur");
 		res.status(500).json({ message: error });
 	}
 };

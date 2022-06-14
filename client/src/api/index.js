@@ -17,5 +17,4 @@ export const deletePost = (id) => API.delete(`/posts/${id}`);
 export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
 
 export const signin = (formData) => API.post("/users/signin", formData);
-console.log("I am in the api file");
 export const signup = (formData) => API.post("/users/signup", formData);

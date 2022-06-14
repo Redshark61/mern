@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Avatar, Button, Paper, Grid, Typography, Container, TextField } from "@material-ui/core";
+import { Avatar, Button, Paper, Grid, Typography, Container } from "@material-ui/core";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Input from "./Input";
 import { GoogleLogin } from "react-google-login";
@@ -59,7 +59,6 @@ const Auth = () => {
 
 	const googleFailure = (error) => {
 		console.log(error);
-		console.log("google failure");
 	};
 
 	return (
