@@ -10,6 +10,20 @@ export const getPosts = async (req, res) => {
 	}
 };
 
+export const getPostsBySearch = async (req, res) => {
+	const { search, tags } = req.query;
+
+	try {
+		const title = search ? new RegExp(search, "i") : null;
+		const posts = await PostMessage.find({
+			$or: [{ title }, { tags: { $in: tags.split(",") } }],
+		});
+		res.status(200).json({ data: posts });
+	} catch (error) {
+		res.status(404).json({ error });
+	}
+};
+
 export const createPost = async (req, res) => {
 	const body = req.body;
 
