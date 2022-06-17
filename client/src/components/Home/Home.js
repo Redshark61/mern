@@ -24,10 +24,6 @@ const Home = () => {
 	const page = query.get("page") || 1;
 	const searchQuery = query.get("search") || "";
 
-	useEffect(() => {
-		dispatch(getPosts());
-	}, [currentId, dispatch]);
-
 	const handleKeyPress = (e) => {
 		if (e.key === "Enter") {
 			searchPost();
@@ -87,7 +83,7 @@ const Home = () => {
 						</AppBar>
 						<Form currentId={currentId} setCurrentId={setCurrentId} />
 						<Paper className={classes.pagination}>
-							<Pagination />
+							<Pagination page={page} />
 						</Paper>
 					</Grid>
 				</Grid>
