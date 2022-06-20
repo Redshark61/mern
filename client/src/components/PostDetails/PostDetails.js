@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { useParams, useNavigate } from "react-router-dom";
 import useStyles from "./styles";
-import { getPost } from "../../actions/posts";
+import { getPost, getPostsBySearch } from "../../actions/posts";
 
 const PostDetails = () => {
 	const classes = useStyles();
@@ -17,16 +17,23 @@ const PostDetails = () => {
 		dispatch(getPost(id));
 	}, [id, dispatch]);
 
-	if (!post) return null;
+	useEffect(() => {
+		if (post) {
+			const tags = post?.tags.join(",");
+			dispatch(getPostsBySearch({ search: "none", tags: tags }));
+		}
+	}, [post, dispatch]);
 
-	console.log(isLoading);
+	if (!post) {
+		return null;
+	}
+	const recommendedPosts = posts.filter((post) => post._id !== id);
 
-	if (isLoading)
-		return (
-			// <Paper elevation={6} className={classes.loadingPaper}>
-			<CircularProgress size="7em" />
-			// </Paper>
-		);
+	if (isLoading) {
+		return <CircularProgress size="7em" />;
+	}
+
+	const openPost = (_id) => navigation(`/post/${_id}`);
 
 	return (
 		<Paper style={{ padding: "20px", borderRadius: "15px" }} elevation={6}>
@@ -64,6 +71,39 @@ const PostDetails = () => {
 					/>
 				</div>
 			</div>
+			{recommendedPosts.length > 0 && (
+				<div className={classes.section}>
+					<Typography gutterBottom variant="h5">
+						You might also like:
+					</Typography>
+					<Divider />
+					<div className={classes.recommendedPosts}>
+						{recommendedPosts.map((post) => (
+							<div
+								style={{ margin: "20px", cursor: "pointer" }}
+								onClick={() => {
+									openPost(post._id);
+								}}
+								key={post.is}
+							>
+								<Typography gutterBottom variant="h6">
+									{post.title}
+								</Typography>
+								<Typography gutterBottom variant="subtitle2">
+									{post.name}
+								</Typography>
+								<Typography gutterBottom variant="subtitle2">
+									{post.message}
+								</Typography>
+								<Typography gutterBottom variant="subtitle1">
+									Likes: {post.likes.length}
+								</Typography>
+								<img src={post.selectedFile} width="200px" alt="" />
+							</div>
+						))}
+					</div>
+				</div>
+			)}
 		</Paper>
 	);
 };

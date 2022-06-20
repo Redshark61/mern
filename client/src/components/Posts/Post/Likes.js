@@ -2,7 +2,6 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpAltOutlined from "@mui/icons-material/ThumbUpAltOutlined";
 
 const Likes = ({ post, user }) => {
-	console.log(post);
 	if (post?.likes?.length > 0) {
 		return post.likes.find((like) => like === (user?.result?.googleId || user?.result?._id)) ? (
 			<>

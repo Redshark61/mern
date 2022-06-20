@@ -7,9 +7,10 @@ import { createPost, updatePost } from "../../actions/posts";
 import { useSelector } from "react-redux";
 
 const Form = ({ currentId, setCurrentId }) => {
-	const post = useSelector((state) =>
-		currentId ? state.posts.find((p) => p._id === currentId) : null
-	);
+	const post = useSelector((state) => {
+		console.log(state);
+		return currentId ? state.posts.posts.find((p) => p._id === currentId) : null;
+	});
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const [postData, setPostData] = useState({
