@@ -5,6 +5,7 @@ import moment from "moment";
 import { useParams, useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 import { getPost, getPostsBySearch } from "../../actions/posts";
+import CommentSection from "./CommentSection";
 
 const PostDetails = () => {
 	const classes = useStyles();
@@ -52,12 +53,10 @@ const PostDetails = () => {
 					<Typography variant="body1">{moment(post.createdAt).fromNow()}</Typography>
 					<Divider style={{ margin: "20px 0" }} />
 					<Typography variant="body1">
-						<strong>Realtime Chat - coming soon!</strong>
+						<strong>Live Time Chat - coming soon!</strong>
 					</Typography>
 					<Divider style={{ margin: "20px 0" }} />
-					<Typography variant="body1">
-						<strong>Comments - coming soon!</strong>
-					</Typography>
+					<CommentSection post={post} />
 					<Divider style={{ margin: "20px 0" }} />
 				</div>
 				<div className={classes.imageSection}>
