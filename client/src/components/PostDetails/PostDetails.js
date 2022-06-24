@@ -83,7 +83,7 @@ const PostDetails = () => {
 								onClick={() => {
 									openPost(post._id);
 								}}
-								key={post.is}
+								key={post._id}
 							>
 								<Typography gutterBottom variant="h6">
 									{post.title}
