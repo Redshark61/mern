@@ -15,14 +15,29 @@ import moment from "moment";
 import { useDispatch } from "react-redux";
 import { deletePost, likePost } from "../../../actions/posts";
 import Likes from "./Likes";
+import { useState } from "react";
 
 const Post = ({ post, setCurrentId }) => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
+	const [likes, setLikes] = useState(post?.likes);
 	const user = JSON.parse(localStorage.getItem("profile"));
 	const navigation = useNavigate();
-
+	const userID = user?.result?.googleId || user?.result?._id;
 	const openPost = () => navigation(`/post/${post._id}`);
+	const hasLiked = post.likes.find((like) => like === userID);
+
+	const handleClick = () => {
+		dispatch(likePost(post._id));
+
+		if (hasLiked) {
+			setLikes(post.likes.filter((id) => id !== userID));
+		} else {
+			setLikes((prevState) => {
+				return [...prevState, userID];
+			});
+		}
+	};
 
 	return (
 		<Card className={classes.card} raised elevation={6}>
@@ -62,15 +77,8 @@ const Post = ({ post, setCurrentId }) => {
 				</CardContent>
 			</ButtonBase>
 			<CardActions className={classes.cardActions}>
-				<Button
-					size="small"
-					color="primary"
-					disabled={!user?.result}
-					onClick={() => {
-						dispatch(likePost(post._id));
-					}}
-				>
-					<Likes post={post} user={user} />
+				<Button size="small" color="primary" disabled={!user?.result} onClick={handleClick}>
+					<Likes post={post} userID={userID} likes={likes} />
 				</Button>
 				{(user?.result?.googleId === post?.creator ||
 					user?.result?._id === post?.creator) && (
