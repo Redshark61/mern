@@ -5,7 +5,7 @@ export const getPosts = async (req, res) => {
 	const { page } = req.query;
 
 	try {
-		const LIMIT = 2;
+		const LIMIT = 10;
 		// convert page to number
 		const newPage = parseInt(page);
 		const startIndex = (newPage - 1) * LIMIT;
